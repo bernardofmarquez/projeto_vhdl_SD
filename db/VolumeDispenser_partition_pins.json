@@ -1,0 +1,89 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "Q_A[0]",
+					"strict" : false
+				},
+				{
+					"name" : "Q_A[1]",
+					"strict" : false
+				},
+				{
+					"name" : "Q_A[2]",
+					"strict" : false
+				},
+				{
+					"name" : "Q_A[3]",
+					"strict" : false
+				},
+				{
+					"name" : "Q_B[0]",
+					"strict" : false
+				},
+				{
+					"name" : "Q_B[1]",
+					"strict" : false
+				},
+				{
+					"name" : "Q_B[2]",
+					"strict" : false
+				},
+				{
+					"name" : "Q_B[3]",
+					"strict" : false
+				},
+				{
+					"name" : "CMP_R",
+					"strict" : false
+				},
+				{
+					"name" : "done",
+					"strict" : false
+				},
+				{
+					"name" : "bebida_sel",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				},
+				{
+					"name" : "reset",
+					"strict" : false
+				},
+				{
+					"name" : "loadA",
+					"strict" : false
+				},
+				{
+					"name" : "loadB",
+					"strict" : false
+				},
+				{
+					"name" : "start",
+					"strict" : false
+				},
+				{
+					"name" : "quantidade[0]",
+					"strict" : false
+				},
+				{
+					"name" : "quantidade[1]",
+					"strict" : false
+				},
+				{
+					"name" : "quantidade[2]",
+					"strict" : false
+				},
+				{
+					"name" : "quantidade[3]",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

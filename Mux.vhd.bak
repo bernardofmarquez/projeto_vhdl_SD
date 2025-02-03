@@ -1,0 +1,22 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity MUX4 is
+    Port (
+        A, B: in  STD_LOGIC_VECTOR(4 downto 0);  -- Entradas
+        S : in  STD_LOGIC_VECTOR (1 downto 0);  -- Sinais de seleção
+        Y : out STD_LOGIC_VECTOR(4 downto 0);  -- Saída
+    );
+end MUX4;
+
+architecture Behavioral of MUX4 is
+begin
+    process(A, B, C, D, S)
+    begin
+        case S is
+            when "00" => Y <= A;
+            when "01" => Y <= B;
+            when others => Y <= "0000";
+        end case;
+    end process;
+end Behavioral;

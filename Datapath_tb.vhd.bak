@@ -1,0 +1,107 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity Datapath_TB is
+end Datapath_TB;
+
+architecture Behavioral of Datapath_TB is
+    constant W : integer := 4;
+    
+    -- Sinais de teste
+    signal clk      : STD_LOGIC := '0';
+    signal reset    : STD_LOGIC := '0';
+    signal start    : STD_LOGIC := '0';
+    signal loadA    : STD_LOGIC := '0';
+    signal loadB    : STD_LOGIC := '0';
+    signal bebida_sel : STD_LOGIC := '0';
+    signal quantidade : STD_LOGIC_VECTOR(W-1 downto 0) := (others => '0');
+    signal Q_A       : STD_LOGIC_VECTOR(W-1 downto 0);
+    signal Q_B       : STD_LOGIC_VECTOR(W-1 downto 0);
+    signal CMP_R     : STD_LOGIC;
+    signal done      : STD_LOGIC;
+    
+    -- Instância do Datapath
+    component Datapath
+        Generic (W : integer := 4);
+        Port ( clk      : in  STD_LOGIC;
+               reset    : in  STD_LOGIC;
+               start    : in  STD_LOGIC;
+               loadA    : in  STD_LOGIC;
+               loadB    : in  STD_LOGIC;
+               quantidade : in  STD_LOGIC_VECTOR(W-1 downto 0);
+               Q_A       : out STD_LOGIC_VECTOR(W-1 downto 0);
+               Q_B       : out STD_LOGIC_VECTOR(W-1 downto 0);
+               CMP_R     : out STD_LOGIC;
+               done      : out STD_LOGIC);
+    end component;
+    
+    -- Geração de clock
+    constant CLK_PERIOD : time := 10 ns;
+    
+begin
+    UUT: Datapath
+        Generic map (W => W)
+        Port map (
+            clk      => clk,
+            reset    => reset,
+            start    => start,
+            loadA    => loadA,
+            loadB    => loadB,
+            quantidade => quantidade,
+            Q_A       => Q_A,
+            Q_B       => Q_B,
+            CMP_R     => CMP_R,
+            done      => done
+        );
+    
+    -- Processo de clock
+    process
+    begin
+        while true loop
+            clk <= '0';
+            wait for CLK_PERIOD / 2;
+            clk <= '1';
+            wait for CLK_PERIOD / 2;
+        end loop;
+    end process;
+    
+    -- Processo de teste
+    process
+    begin
+        -- Reset inicial
+        reset <= '1';
+        wait for 20 ns;
+        reset <= '0';
+        wait for 20 ns;
+        
+        -- Carregar valor inicial nos registradores
+        loadA <= '1';
+        loadB <= '1';
+        quantidade <= "0010"; -- Quantidade inicial
+        wait for CLK_PERIOD;
+        loadA <= '0';
+        loadB <= '0';
+        
+        -- Iniciar subtração da bebida A
+        start <= '1';
+        wait for CLK_PERIOD;
+        start <= '0';
+        
+        -- Esperar conclusão
+        wait until done = '1';
+        
+        -- Iniciar subtração da bebida B
+        bebida_sel <= '1';
+        start <= '1';
+        wait for CLK_PERIOD;
+        start <= '0';
+        
+        -- Esperar conclusão
+        wait until done = '1';
+        
+        -- Teste concluído
+        wait;
+    end process;
+end Behavioral;
