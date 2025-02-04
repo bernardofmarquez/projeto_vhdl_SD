@@ -15,9 +15,6 @@ entity Datapath is
 			  loadReg    : in STD_LOGIC;
            bebida_sel : in STD_LOGIC_VECTOR(0 downto 0);  -- Seleção de bebida (A ou B)
            quantidade : in  STD_LOGIC_VECTOR(W-1 downto 0); -- Quantidade a ser subtraída
-           -- level_A   : in  STD_LOGIC_VECTOR(W-1 downto 0);  -- Nível da bebida A
-           -- level_B   : in  STD_LOGIC_VECTOR(W-1 downto 0);  -- Nível da bebida B
-           -- min_value : in  STD_LOGIC_VECTOR(W-1 downto 0);  -- Valor mínimo para comparação
            Q_A       : out STD_LOGIC_VECTOR(W-1 downto 0);  -- Novo nível de A
            Q_B       : out STD_LOGIC_VECTOR(W-1 downto 0);  -- Novo nível de B
 			  CMP_R     : out STD_LOGIC;

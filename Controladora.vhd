@@ -8,6 +8,7 @@ ENTITY Controladora IS
         start_sub : IN STD_LOGIC := '0';
         critValue : IN STD_LOGIC := '0';
         Done      : IN STD_LOGIC := '0';
+		  critAlarm : out STD_LOGIC := '0';
 		  loadReg   : out std_logic := '0';
 		  loadSel   : out std_logic := '0';
 		  loadFill  : out std_logic := '0'
@@ -15,7 +16,7 @@ ENTITY Controladora IS
 END Controladora;
 
 ARCHITECTURE BEHAVIOR OF Controladora IS
-    TYPE type_fstate IS (Start,Idle,Checking,Dispensing,Finish);
+    TYPE type_fstate IS (Start,Idle,Alarm,Checking,Dispensing,Finish);
     SIGNAL fstate : type_fstate;
     SIGNAL reg_fstate : type_fstate;
 BEGIN
@@ -35,6 +36,7 @@ BEGIN
                 WHEN Start =>
                     reg_fstate <= Idle;
                 WHEN Idle =>
+					     critAlarm <= '0';
 						  loadSel <= '1';
 						  loadReg <= '0';
                     IF ((start_sub = '1')) THEN
@@ -48,10 +50,17 @@ BEGIN
                         reg_fstate <= Dispensing;
                     -- Inserting 'else' block to prevent latch inference
 						  ELSIF (critValue = '1') THEN 
-								reg_fstate <= Idle;
+								reg_fstate <= Alarm;
                     ELSE
                         reg_fstate <= Checking;
                     END IF;
+					 WHEN Alarm => 
+					     critAlarm <= '1';
+						  IF ((start_sub = '0')) THEN
+							  reg_fstate <= Idle;
+						  ELSE
+							  reg_fstate <= Alarm;
+						  END IF;
                 WHEN Dispensing =>
                     IF ((Done = '1')) THEN
                         reg_fstate <= Finish;

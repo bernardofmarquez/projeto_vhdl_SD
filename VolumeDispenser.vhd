@@ -11,6 +11,7 @@ Entity VolumeDispenser is
 		start      : in std_logic;
 		fill       : in std_logic;
 		
+		critAlarm: out std_logic;
 		QA: out std_logic_vector (3 downto 0);
 		QB: out std_logic_vector (3 downto 0)
 		);
@@ -36,6 +37,7 @@ architecture arch of VolumeDispenser is
 		start_sub : in std_logic;
       critValue : in std_logic;
       Done      : in std_logic;
+		critAlarm  : out std_logic;
 		loadReg   : out std_logic;
 		loadSel   : out std_logic;
 		loadFill  : out std_logic
@@ -65,6 +67,7 @@ begin
 						reset => reset,
 						start_sub => start,
 						critValue => sigCritValue,
+						critAlarm => critAlarm,
 						Done => sigDone,
 						loadReg => sigLoadReg,
 						loadSel => sigLoadSel,

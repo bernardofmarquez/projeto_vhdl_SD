@@ -15,6 +15,7 @@ architecture Behavioral of VolumeDispenser_TB is
 		signal start      : std_logic := '0';
 		signal fill       : std_logic := '0';
 		
+		signal critAlarm  : std_logic;
 		signal QA         : std_logic_vector (3 downto 0);
 		signal QB         : std_logic_vector (3 downto 0);
     
@@ -31,6 +32,7 @@ begin
 				quantidade => quantidade,
 				bebidaSel  => bebidaSel,
 				fill       => fill,
+				critAlarm  => critAlarm,
 				QA         => QA,
 				QB         => QB
         );
