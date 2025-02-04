@@ -13,9 +13,11 @@ architecture Behavioral of Datapath_TB is
     signal clk        : STD_LOGIC := '0';
     signal reset      : STD_LOGIC := '0';
     signal start      : STD_LOGIC := '0';
-    signal loadA      : STD_LOGIC := '0';
-    signal loadB      : STD_LOGIC := '0';
-    signal bebida_sel : STD_LOGIC := '0';
+    -- signal loadA      : STD_LOGIC := '0';
+    -- signal loadB      : STD_LOGIC := '0';
+	 signal loadSel    : STD_LOGIC := '0';
+	 signal loadReg    : STD_LOGIC := '0';
+    signal bebida_sel : STD_LOGIC_VECTOR(0 downto 0) := "0";
     signal quantidade : STD_LOGIC_VECTOR(W-1 downto 0) := (others => '0');
     
     -- Sinais de saída
@@ -35,8 +37,8 @@ begin
             clk        => clk,
             reset      => reset,
             start      => start,
-            loadA      => loadA,
-            loadB      => loadB,
+				loadSel    => loadSel,
+				loadReg    => loadReg,
             bebida_sel => bebida_sel,
             quantidade => quantidade,
             Q_A        => Q_A,
@@ -48,7 +50,7 @@ begin
     -- Geração de clock
     process
     begin
-        while now < 200 ns loop
+        while now < 400 ns loop
             clk <= '0';
             wait for clk_period / 2;
             clk <= '1';
@@ -70,7 +72,13 @@ begin
         quantidade <= "0011";  -- Exemplo: subtrair 3
 
         -- Selecionar bebida A
-        bebida_sel <= '0';
+        bebida_sel <= "0";
+		  
+		  loadSel <= '1';
+        wait for 20 ns;
+        loadSel <= '0';
+        wait for 20 ns;
+		  
         -- Iniciar a subtração
         start <= '1';
         wait for 20ns;
@@ -78,36 +86,31 @@ begin
         -- Esperar 'done' indicar que a subtração foi concluída
         wait for 10ns;
         -- Agora carregar o novo valor em A
-        loadA <= '1';
+        loadReg <= '1';
         wait for clk_period;
-        loadA <= '0';
+        loadReg <= '0';
+		  
+		  wait for 20ns;
 		  
 		  -- Selecionar bebida B
-        bebida_sel <= '1';
-        -- Iniciar a subtração
-        start <= '1';
-        wait for 20ns;
-        start <= '0';
-        -- Esperar 'done' indicar que a subtração foi concluída
-        wait for 10ns;
-        -- Agora carregar o novo valor em A
-        loadB <= '1';
-        wait for clk_period;
-        loadB <= '0';
+        bebida_sel <= "1";
 		  
-		  -- Selecionar bebida A
-		  quantidade <= "1001"; 
-        bebida_sel <= '0';
+		  loadSel <= '1';
+        wait for 20 ns;
+        loadSel <= '0';
+        wait for 20 ns;
+		  
         -- Iniciar a subtração
         start <= '1';
         wait for 20ns;
         start <= '0';
         -- Esperar 'done' indicar que a subtração foi concluída
         wait for 10ns;
-        -- Agora carregar o novo valor em A
-        loadA <= '1';
+        -- Agora carregar o novo valor em B
+        loadReg <= '1';
         wait for clk_period;
-        loadA <= '0';
+        loadReg <= '0';
+		  
 
         wait;
     end process;

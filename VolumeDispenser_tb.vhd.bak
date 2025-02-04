@@ -1,0 +1,72 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+
+ENTITY VolumeDispenser_tb IS
+END VolumeDispenser_tb;
+
+ARCHITECTURE tb OF VolumeDispenser_tb IS
+    -- Component declaration
+    COMPONENT VolumeDispenser
+        PORT (
+            clk      : IN STD_LOGIC;
+            reset    : IN STD_LOGIC;
+            pedido  : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+            done     : OUT STD_LOGIC
+        );
+    END COMPONENT;
+
+    -- Signals for testbench
+    SIGNAL clk_tb    : STD_LOGIC := '0';
+    SIGNAL reset_tb  : STD_LOGIC := '1';
+    SIGNAL pedido_tb : STD_LOGIC_VECTOR(7 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL done_tb   : STD_LOGIC;
+
+    -- Clock process
+    CONSTANT clk_period : TIME := 10 ns;
+BEGIN
+    -- Instantiate the Unit Under Test (UUT)
+    UUT: VolumeDispenser
+        PORT MAP (
+            clk     => clk_tb,
+            reset   => reset_tb,
+            pedido  => pedido_tb,
+            done    => done_tb
+        );
+    
+    -- Clock generation
+    clk_process : PROCESS
+    BEGIN
+        WHILE TRUE LOOP
+            clk_tb <= '0';
+            WAIT FOR clk_period / 2;
+            clk_tb <= '1';
+            WAIT FOR clk_period / 2;
+        END LOOP;
+    END PROCESS;
+
+    -- Stimulus process
+    stim_process : PROCESS
+    BEGIN
+        -- Initial reset
+        reset_tb <= '1';
+        WAIT FOR 20 ns;
+        reset_tb <= '0';
+        WAIT FOR 20 ns;
+        
+        -- Test case 1: Dispensar 10 unidades
+        pedido_tb <= "00001010";  -- 10 em binário
+        WAIT FOR 100 ns;
+        
+        -- Test case 2: Dispensar 20 unidades
+        pedido_tb <= "00010100";  -- 20 em binário
+        WAIT FOR 100 ns;
+        
+        -- Test case 3: Dispensar 30 unidades
+        pedido_tb <= "00011110";  -- 30 em binário
+        WAIT FOR 100 ns;
+        
+        -- End simulation
+        WAIT;
+    END PROCESS;
+END tb;
