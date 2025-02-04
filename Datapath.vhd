@@ -8,11 +8,10 @@ entity Datapath is
     Generic (W : integer := 4);  -- Largura dos registradores
     Port ( clk      : in  STD_LOGIC;
            reset    : in  STD_LOGIC;
-           -- start    : in  STD_LOGIC;
-			  -- loadA    : in STD_LOGIC;
-			  -- loadB    : in STD_LOGIC;
 			  loadSel    : in STD_LOGIC;
 			  loadReg    : in STD_LOGIC;
+			  loadMin    : in STD_LOGIC;
+			  quantidadeMin : in  STD_LOGIC_VECTOR(W-1 downto 0);
            bebida_sel : in STD_LOGIC_VECTOR(0 downto 0);  -- Seleção de bebida (A ou B)
            quantidade : in  STD_LOGIC_VECTOR(W-1 downto 0); -- Quantidade a ser subtraída
            Q_A       : out STD_LOGIC_VECTOR(W-1 downto 0);  -- Novo nível de A
@@ -29,6 +28,7 @@ architecture Behavioral of Datapath is
     signal comp_result : STD_LOGIC;                       -- Resultado do comparador
     signal reg_A_out   : STD_LOGIC_VECTOR(W-1 downto 0);  -- Saída do registrador A
     signal reg_B_out   : STD_LOGIC_VECTOR(W-1 downto 0);  -- Saída do registrador B
+	 signal reg_Min_out : STD_LOGIC_VECTOR(W-1 downto 0);
     signal subtr_out   : STD_LOGIC_VECTOR(W-1 downto 0);  -- Saída do subtrator
 	 signal reg_sel_out : STD_LOGIC_VECTOR(0 downto 0);
 	 signal loadA       : STD_LOGIC;
@@ -36,8 +36,8 @@ architecture Behavioral of Datapath is
 	
 begin
 
-    -- Instanciação dos RegistradoreS
-	 Reg_Sel: entity work.RegistradorBebida
+    -- Instanciação dos Registradores
+	 Reg_Sel: entity work.RegistradorBebida -- Registra seleçao do usuario
 	     Generic map (W => 1)
         Port map ( clk     => clk,
                    reset   => reset,
@@ -45,9 +45,17 @@ begin
                    D       => bebida_sel,
                    Q       => reg_sel_out);
 						 
+	 Reg_Min: entity work.RegistradorBebida 
+        Port map ( clk     => clk,
+                   reset   => reset,
+                   load    => loadMin,
+                   D       => quantidadeMin,
+                   Q       => reg_Min_out );
+						 
+	 -- Registra bebidas
 	 loadA <= loadReg when reg_sel_out(0) = '0' else '0';
 	 loadB <= loadReg when reg_sel_out(0) = '1' else '0';
-    Reg_A: entity work.RegistradorBebida
+    Reg_A: entity work.RegistradorBebida 
         Port map ( clk     => clk,
                    reset   => reset,
                    load    => loadA,
@@ -70,10 +78,10 @@ begin
 
     -- Instanciação do Comparador
     Comparador: entity work.Comparador
-        Port map ( level    => mux_out,
-		             quantidade    => quantidade,
-                   min_value => "0011",
-                   result    => comp_result);
+        Port map ( level      => mux_out,
+		             quantidade => quantidade,
+                   min_value  => reg_Min_out,
+                   result     => comp_result);
 						 
     -- Instanciação do Subtrator
     Subtrator: entity work.Subtrator

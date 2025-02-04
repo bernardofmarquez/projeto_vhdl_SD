@@ -8,7 +8,11 @@ ENTITY Controladora IS
         start_sub : IN STD_LOGIC := '0';
         critValue : IN STD_LOGIC := '0';
         Done      : IN STD_LOGIC := '0';
+		  config    : IN STD_LOGIC := '0';
+		  
+		  
 		  critAlarm : out STD_LOGIC := '0';
+		  loadMin   : out STD_LOGIC := '0';
 		  loadReg   : out std_logic := '0';
 		  loadSel   : out std_logic := '0';
 		  loadFill  : out std_logic := '0'
@@ -16,7 +20,7 @@ ENTITY Controladora IS
 END Controladora;
 
 ARCHITECTURE BEHAVIOR OF Controladora IS
-    TYPE type_fstate IS (Start,Idle,Alarm,Checking,Dispensing,Finish);
+    TYPE type_fstate IS (Start,Idle,ConfigS,Alarm,Checking,Dispensing,Finish);
     SIGNAL fstate : type_fstate;
     SIGNAL reg_fstate : type_fstate;
 BEGIN
@@ -27,7 +31,7 @@ BEGIN
         END IF;
     END PROCESS;
 
-    PROCESS (fstate,reset,start_sub,critValue,Done)
+    PROCESS (fstate,reset,start_sub,config,critValue,Done)
     BEGIN
         IF (reset='1') THEN
             reg_fstate <= Start;
@@ -38,12 +42,22 @@ BEGIN
                 WHEN Idle =>
 					     critAlarm <= '0';
 						  loadSel <= '1';
+						  loadMin <= '0';
 						  loadReg <= '0';
-                    IF ((start_sub = '1')) THEN
+						  IF ((config = '1')) THEN 
+								reg_fstate <= ConfigS;
+                    ELSIF ((start_sub = '1')) THEN
                         reg_fstate <= Checking;
                     ELSE
                         reg_fstate <= Idle;
                     END IF;
+					 WHEN ConfigS => 
+						  loadMin <= '1';
+						  IF ((config = '0')) THEN 
+								reg_fstate <= Idle;
+						  ELSE 
+						      reg_fstate <= ConfigS;
+						  END IF;
                 WHEN Checking =>
 						  loadSel <= '0';
                     IF (NOT((critValue = '1'))) THEN
@@ -62,6 +76,7 @@ BEGIN
 							  reg_fstate <= Alarm;
 						  END IF;
                 WHEN Dispensing =>
+						  loadReg <= '1';
                     IF ((Done = '1')) THEN
                         reg_fstate <= Finish;
                     -- Inserting 'else' block to prevent latch inference
@@ -69,7 +84,7 @@ BEGIN
                         reg_fstate <= Dispensing;
                     END IF;
                 WHEN Finish =>
-						  loadReg <= '1';
+						  loadReg <= '0';
                     IF (NOT((start_sub = '1'))) THEN
                         reg_fstate <= Idle;
                     -- Inserting 'else' block to prevent latch inference
