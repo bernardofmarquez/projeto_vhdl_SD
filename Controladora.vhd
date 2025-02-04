@@ -3,14 +3,14 @@ USE ieee.std_logic_1164.all;
 
 ENTITY Controladora IS
     PORT (
-        clock : IN STD_LOGIC;
-        reset : IN STD_LOGIC := '0';
+        clock     : IN STD_LOGIC;
+        reset     : IN STD_LOGIC := '0';
         start_sub : IN STD_LOGIC := '0';
         critValue : IN STD_LOGIC := '0';
-        Done : IN STD_LOGIC := '0';
-		  loadReg : out std_logic := '0';
-		  loadSel : out std_logic := '0';
-		  loadFill : out std_logic := '0'
+        Done      : IN STD_LOGIC := '0';
+		  loadReg   : out std_logic := '0';
+		  loadSel   : out std_logic := '0';
+		  loadFill  : out std_logic := '0'
     );
 END Controladora;
 

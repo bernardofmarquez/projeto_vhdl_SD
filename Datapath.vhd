@@ -8,7 +8,7 @@ entity Datapath is
     Generic (W : integer := 4);  -- Largura dos registradores
     Port ( clk      : in  STD_LOGIC;
            reset    : in  STD_LOGIC;
-           start    : in  STD_LOGIC;
+           -- start    : in  STD_LOGIC;
 			  -- loadA    : in STD_LOGIC;
 			  -- loadB    : in STD_LOGIC;
 			  loadSel    : in STD_LOGIC;
@@ -81,7 +81,7 @@ begin
     Subtrator: entity work.Subtrator
         Port map ( clk        => clk,
                    reset      => '1',
-                   load       => start,  -- Ativado quando start da FSM estiver em '1'
+                   load       => '1',  -- Ativado quando start da FSM estiver em '1'
                    quantidade => quantidade,
                    D          => mux_out,  -- Bebida selecionada pelo Mux
                    Q          => subtr_out,

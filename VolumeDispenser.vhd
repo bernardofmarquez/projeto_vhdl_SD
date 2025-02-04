@@ -33,13 +33,14 @@ architecture arch of VolumeDispenser is
 	component Controladora port (
 		clock     : in std_logic;
 		reset     : in std_logic;
-		start_sub     : in std_logic;
+		start_sub : in std_logic;
       critValue : in std_logic;
-      Done       : in std_logic;
-		loadReg : out std_logic;
-		loadSel : out std_logic;
-		loadFill : out std_logic
+      Done      : in std_logic;
+		loadReg   : out std_logic;
+		loadSel   : out std_logic;
+		loadFill  : out std_logic
 	); end component;
+	
 	signal sigLoadReg: std_logic;
 	signal sigLoadSel: std_logic;
 	signal sigLoadFill: std_logic;
@@ -53,7 +54,11 @@ begin
 						loadSel => sigLoadSel,
 						loadReg => sigLoadReg,
 						bebida_sel => bebidaSel,
-						quantidade => quantidade
+						quantidade => quantidade,
+						CMP_R         => sigCritValue,
+						Q_A           => QA,
+						Q_B           => QB,
+						done          => sigDone
 					);
 	InstControladora: Controladora port map (
 						clock => clock,
