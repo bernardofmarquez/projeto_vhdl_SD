@@ -47,6 +47,8 @@ BEGIN
                     IF (NOT((critValue = '1'))) THEN
                         reg_fstate <= Dispensing;
                     -- Inserting 'else' block to prevent latch inference
+						  ELSIF (critValue = '1') THEN 
+								reg_fstate <= Idle;
                     ELSE
                         reg_fstate <= Checking;
                     END IF;

@@ -57,7 +57,7 @@ begin
         wait for 20 ns;
 
         -- Definir quantidade a subtrair
-        quantidade <= "0011";
+        quantidade <= "0001";
         bebidaSel <= "0";
 		  start     <= '1';
         wait for 20 ns;
@@ -65,12 +65,12 @@ begin
         wait for 20 ns;
 		  
 		  -- Definir quantidade a subtrair
-        quantidade <= "1101";
+        quantidade <= "1100";
         bebidaSel <= "1";
 		  start     <= '1';
         wait for 20 ns;
         start <= '0';
-        wait for 20 ns;
+        wait for 30 ns;
 		  
 		  -- Definir quantidade a subtrair
         quantidade <= "0001";

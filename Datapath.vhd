@@ -74,6 +74,7 @@ begin
     -- Instanciação do Comparador
     Comparador: entity work.Comparador
         Port map ( level    => mux_out,
+		             quantidade    => quantidade,
                    min_value => "0011",
                    result    => comp_result);
 						 
