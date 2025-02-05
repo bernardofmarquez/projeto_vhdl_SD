@@ -6,18 +6,19 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 -- Definição do Datapath
 entity Datapath is
     Generic (W : integer := 4);  -- Largura dos registradores
-    Port ( clk      : in  STD_LOGIC;
-           reset    : in  STD_LOGIC;
-			  loadSel    : in STD_LOGIC;
-			  loadReg    : in STD_LOGIC;
-			  loadMin    : in STD_LOGIC;
+    Port ( clk           : in  STD_LOGIC;
+           reset         : in  STD_LOGIC;
+			  loadSel       : in STD_LOGIC;
+			  loadReg       : in STD_LOGIC;
+			  loadMin       : in STD_LOGIC;
+			  loadFill      : in STD_LOGIC;
 			  quantidadeMin : in  STD_LOGIC_VECTOR(W-1 downto 0);
-           bebida_sel : in STD_LOGIC_VECTOR(0 downto 0);  -- Seleção de bebida (A ou B)
-           quantidade : in  STD_LOGIC_VECTOR(W-1 downto 0); -- Quantidade a ser subtraída
-           Q_A       : out STD_LOGIC_VECTOR(W-1 downto 0);  -- Novo nível de A
-           Q_B       : out STD_LOGIC_VECTOR(W-1 downto 0);  -- Novo nível de B
-			  CMP_R     : out STD_LOGIC;
-           done      : out STD_LOGIC);  -- Sinal de conclusão da operação
+           bebida_sel    : in STD_LOGIC_VECTOR(0 downto 0);  -- Seleção de bebida (A ou B)
+           quantidade    : in  STD_LOGIC_VECTOR(W-1 downto 0); -- Quantidade a ser subtraída
+           Q_A           : out STD_LOGIC_VECTOR(W-1 downto 0);  -- Novo nível de A
+           Q_B           : out STD_LOGIC_VECTOR(W-1 downto 0);  -- Novo nível de B
+			  CMP_R         : out STD_LOGIC;
+           done          : out STD_LOGIC);  -- Sinal de conclusão da operação
 	
 			  
 end Datapath;
@@ -42,6 +43,7 @@ begin
         Port map ( clk     => clk,
                    reset   => reset,
                    load    => loadSel,
+						 fill    => '0',
                    D       => bebida_sel,
                    Q       => reg_sel_out);
 						 
@@ -49,6 +51,7 @@ begin
         Port map ( clk     => clk,
                    reset   => reset,
                    load    => loadMin,
+						 fill    => '0',
                    D       => quantidadeMin,
                    Q       => reg_Min_out );
 						 
@@ -59,6 +62,7 @@ begin
         Port map ( clk     => clk,
                    reset   => reset,
                    load    => loadA,
+						 fill    => loadFill,
                    D       => subtr_out,
                    Q       => reg_A_out );
 
@@ -66,6 +70,7 @@ begin
         Port map ( clk     => clk,
                    reset   => reset,
                    load    => loadB,
+						 fill    => loadFill,
                    D       => subtr_out,
                    Q       => reg_B_out );
 

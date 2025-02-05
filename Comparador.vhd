@@ -14,7 +14,7 @@ architecture Behavioral of Comparador is
 begin
     process(level, min_value, quantidade)
     begin
-        if (quantidade >= level) or (unsigned(level) - unsigned(quantidade)) < unsigned(min_value)  then
+        if ((quantidade >= level) or (unsigned(level) - unsigned(quantidade)) < unsigned(min_value))  then
             result <= '1';  -- Sinaliza se o nível está abaixo do mínimo
         else
             result <= '0';

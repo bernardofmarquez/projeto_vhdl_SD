@@ -3,10 +3,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity VolumeDispenser_TB is
-end VolumeDispenser_TB;
+entity VolumeDispenser_tb is
+end VolumeDispenser_tb;
 
-architecture Behavioral of VolumeDispenser_TB is
+architecture Behavioral of VolumeDispenser_tb is
       constant W          : integer := 4;
       signal reset        : std_logic := '0';
 		signal clock        : std_logic := '0';
@@ -92,6 +92,11 @@ begin
         wait for 20 ns;
         start <= '0';
         wait for 20 ns;
+		  
+		  fill <= '1';
+		  wait for 20ns;
+		  fill <= '0';
+		  wait for 20ns;
 
         wait;
     end process;

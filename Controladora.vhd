@@ -9,6 +9,7 @@ ENTITY Controladora IS
         critValue : IN STD_LOGIC := '0';
         Done      : IN STD_LOGIC := '0';
 		  config    : IN STD_LOGIC := '0';
+		  fill      : IN STD_LOGIC := '0';
 		  
 		  
 		  critAlarm : out STD_LOGIC := '0';
@@ -20,7 +21,7 @@ ENTITY Controladora IS
 END Controladora;
 
 ARCHITECTURE BEHAVIOR OF Controladora IS
-    TYPE type_fstate IS (Start,Idle,ConfigS,Alarm,Checking,Dispensing,Finish);
+    TYPE type_fstate IS (Start,Idle,ConfigS,FillS,Alarm,Checking,Dispensing,Finish);
     SIGNAL fstate : type_fstate;
     SIGNAL reg_fstate : type_fstate;
 BEGIN
@@ -31,7 +32,7 @@ BEGIN
         END IF;
     END PROCESS;
 
-    PROCESS (fstate,reset,start_sub,config,critValue,Done)
+    PROCESS (fstate,reset,start_sub,config,critValue,fill,Done)
     BEGIN
         IF (reset='1') THEN
             reg_fstate <= Start;
@@ -44,8 +45,11 @@ BEGIN
 						  loadSel <= '1';
 						  loadMin <= '0';
 						  loadReg <= '0';
+						  loadFill <= '0';
 						  IF ((config = '1')) THEN 
 								reg_fstate <= ConfigS;
+						  ELSIF ((fill = '1')) THEN 
+								reg_fstate <= FillS;
                     ELSIF ((start_sub = '1')) THEN
                         reg_fstate <= Checking;
                     ELSE
@@ -57,6 +61,13 @@ BEGIN
 								reg_fstate <= Idle;
 						  ELSE 
 						      reg_fstate <= ConfigS;
+						  END IF;
+					 WHEN FillS => 
+					     loadFill <= '1';
+						  IF ((fill = '0')) THEN 
+								reg_fstate <= Idle;
+						  ELSE 
+						     reg_fstate <= FillS; 
 						  END IF;
                 WHEN Checking =>
 						  loadSel <= '0';

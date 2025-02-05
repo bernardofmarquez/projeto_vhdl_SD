@@ -26,6 +26,7 @@ architecture arch of VolumeDispenser is
 		loadSel       : in std_logic;
 		loadReg       : in std_logic;
 		loadMin       : in std_logic;
+		loadFill      : in std_logic;
 		bebida_sel    : in std_logic_vector(0 downto 0);
 		quantidade    : in  std_logic_vector(3 downto 0);
 		quantidadeMin : in  std_logic_vector(3 downto 0);
@@ -42,7 +43,8 @@ architecture arch of VolumeDispenser is
 		start_sub : in std_logic;
       critValue : in std_logic;
       Done      : in std_logic;
-		critAlarm  : out std_logic;
+		fill      : in std_logic;
+		critAlarm : out std_logic;
 		loadMin   : out std_logic;
 		loadReg   : out std_logic;
 		loadSel   : out std_logic;
@@ -63,6 +65,7 @@ begin
 						loadMin => sigLoadMin,
 						loadSel => sigLoadSel,
 						loadReg => sigLoadReg,
+						loadFill => sigLoadFill,
 						bebida_sel => bebidaSel,
 						quantidadeMin => quantidadeMin,
 						quantidade => quantidade,
@@ -79,6 +82,7 @@ begin
 						critValue => sigCritValue,
 						critAlarm => critAlarm,
 						Done => sigDone,
+						fill => fill,
 						loadMin => sigLoadMin,
 						loadReg => sigLoadReg,
 						loadSel => sigLoadSel,

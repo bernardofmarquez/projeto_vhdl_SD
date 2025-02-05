@@ -8,6 +8,7 @@ entity RegistradorBebida is
     Port ( clk  : in  STD_LOGIC;
            reset : in  STD_LOGIC;
            load  : in  STD_LOGIC;
+			  fill  : in STD_LOGIC;
            D     : in  STD_LOGIC_VECTOR(W-1 downto 0);
            Q     : out STD_LOGIC_VECTOR(W-1 downto 0));
 end RegistradorBebida;
@@ -19,7 +20,9 @@ begin
         if reset = '1' then
             Q <= (others => '1');
         elsif rising_edge(clk) then
-            if load = '1' then
+		      if fill = '1' then 
+					Q <= (others => '1');
+            elsif load = '1' then
                 Q <= D;
             end if;
         end if;
